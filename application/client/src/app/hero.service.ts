@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Store } from '@ngxs/store';
 
 import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 
 import { Hero } from './hero';
-import { MessageService } from './message.service';
+import { AddMessage } from './messages.state';
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -18,7 +19,8 @@ export class HeroService {
 
   constructor(
     private http: HttpClient,
-    private messageService: MessageService) { }
+    private store: Store,
+  ) { }
 
   /** GET heroes from the server */
   getHeroes (): Observable<Hero[]> {
@@ -113,8 +115,8 @@ export class HeroService {
     };
   }
 
-  /** Log a HeroService message with the MessageService */
+  /** Emmit AddMessage to store */
   private log(message: string) {
-    this.messageService.add('HeroService: ' + message);
+    this.store.dispatch(new AddMessage(`HeroService: ${message}`));
   }
 }

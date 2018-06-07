@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { MessageService } from '../message.service';
+import { Store, Select } from '@ngxs/store';
+import { Observable } from 'rxjs';
+
+import { MessagesState, ClearMessages } from '../messages.state';
 
 @Component({
   selector: 'app-messages',
@@ -8,9 +11,13 @@ import { MessageService } from '../message.service';
 })
 export class MessagesComponent implements OnInit {
 
-  constructor(public messageService: MessageService) {}
+  @Select(MessagesState) messages$: Observable<string[]>;
 
-  ngOnInit() {
+  constructor(private store: Store) { }
+
+  ngOnInit() { }
+
+  clearMessages(): void {
+    this.store.dispatch(new ClearMessages());
   }
-
 }
